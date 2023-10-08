@@ -161,7 +161,9 @@ const { createApp, ref, reactive } = Vue
       <p>風速: 0m/s </p>
       <p>道路勾配: 0° </p>
       <p>胴傾き角: 80° </p>
-      <p>滑らかな舗装でクロスバイクを想定 </p>
+      <p>滑らかな舗装でシティバイクを想定 </p>
+      <p>詳しい計算方法は、下記サイトで解説しています</p>
+      https://qiita.com/bohemian916/items/de40b6db26ddcb74bb4c
     </div>
     `
   })
