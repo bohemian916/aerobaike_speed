@@ -97,3 +97,66 @@ function generate_velocity2watt(myHeight, myMass){
 }
 
 
+function calcVelocity(myHeight, myMass,bicMass,bagMass,tireDia,airTemp,windVelocity,roadSlope,myInclin,watt )
+
+{
+    road = 1.0 //滑らかな舗装
+    resist=0.008
+    w=38  //シティサイクル
+    dress=1.1 
+
+    result = {}
+
+    var BMI = myMass/Math.pow(0.01*myHeight,2);
+
+    var bodyIndex = Math.sqrt(BMI/22);
+    var heightIndex = myHeight/170;
+    var trunkAngle = Math.PI*myInclin/180;
+
+    var faceW = 0.14;
+    var shoulderW = 0.45;
+    var shoulderT = 0.12;
+    var trunkW = 0.4;
+    var arm2W = 0.16;
+    var leg2W = 0.24;
+
+    var faceA = 0.12*0.01*myHeight*heightIndex*faceW;
+    var shoulderA = heightIndex*shoulderW*heightIndex*shoulderT;
+    var trunkA = 0.4*0.01*myHeight*heightIndex*trunkW;
+    var armA = 0.32*0.01*myHeight*heightIndex*arm2W;
+    var legA = 0.45*0.01*myHeight*heightIndex*leg2W;
+    var bodyA = 1*faceA + trunkA*Math.sin(trunkAngle) + shoulderA*Math.cos(trunkAngle) + armA*Math.sin(trunkAngle) + 1*legA;
+    var myArea = bodyA*bodyIndex*dress;
+    var bicArea = tireDia*0.001*w*0.001;
+    var area = 1*myArea + 1*bicArea;
+
+    var totalMass = 1*myMass + 1*bicMass + 1*bagMass;
+
+    var a = 0.30784 * area;
+    var c = 0.0816192 * totalMass;
+    var d = -1.0 * watt;
+
+    var k1 = -1.0 * d/ (2 * a) + (Math.sqrt(3.0*(27* Math.pow(a*d, 2) + 4* a * Math.pow(c,3)) )) / (18 * Math.pow(a,2));
+    var k2 = -1.0 * d/ (2 * a) - (Math.sqrt(3.0*(27* Math.pow(a*d, 2) + 4* a * Math.pow(c,3)) )) / (18 * Math.pow(a,2));
+
+    console.log(k1)
+    console.log(k2)
+    var velocity = Math.cbrt(k1) + Math.cbrt(k2); 
+    var velo_kmps = velocity *3600 /1000
+
+    return velo_kmps.toFixed(3) 
+}
+
+function generate_watt2velocity(myHeight, myMass){
+    let ret = [] 
+    for (let w = 0; w <= 500; w+=5){
+        velo = calcVelocity(myHeight, myMass,15,0,700,25,0,0,80,w )
+        dict = { "watt": w,
+                  "velocity":velo 
+               }
+         ret.push(dict)
+    }
+    return ret 
+}
+
+

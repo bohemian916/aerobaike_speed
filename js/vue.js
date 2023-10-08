@@ -23,7 +23,7 @@ const { createApp, ref, reactive } = Vue
 
       function calc(){
         calc_result.value = calcPower(myHeight.value, myMass.value,bicMass.value,bagMass.value,tireDia.value,airTemp.value,windVelocity.value,roadSlope.value,myInclin.value,myVelocity.value )
-        data_velocity_watt.value = generate_velocity2watt(myHeight.value, myMass.value)
+        data_velocity_watt.value = generate_watt2velocity(myHeight.value, myMass.value)
       }
 
       calc()
